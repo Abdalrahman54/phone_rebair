@@ -121,19 +121,22 @@ if image_data:
 
     if st.button("🔍 تحليل الصورة", use_container_width=True, type="primary"):
         with st.spinner("جاري تحليل الصورة..."):
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=[
-                    types.Part.from_bytes(data=image_data, mime_type="image/jpeg"),
-                    PROMPT
-                ]
-            )
-        st.divider()
-        st.subheader("🔍 نتيجة التحليل")
-        st.markdown(
-            f'<div class="result-box">{response.text}</div>',
-            unsafe_allow_html=True
-        )
+            try:
+                response = client.models.generate_content(
+                    model="gemini-3.1-flash-lite",
+                    contents=[
+                        types.Part.from_bytes(data=image_data, mime_type="image/jpeg"),
+                        PROMPT
+                    ]
+                )
+                st.divider()
+                st.subheader("🔍 نتيجة التحليل")
+                st.markdown(
+                    f'<div class="result-box">{response.text}</div>',
+                    unsafe_allow_html=True
+                )
+            except Exception as e:
+                st.error(f"حدث خطأ أثناء التحليل: {e}\n\nحاول مرة أخرى.")
 
 st.markdown("---")
 st.caption("Powered by Gemini AI")
